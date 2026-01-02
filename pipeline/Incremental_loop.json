@@ -8,6 +8,11 @@
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.loop_input",
+						"type": "Expression"
+					},
+					"isSequential": true,
 					"activities": [
 						{
 							"name": "Asql to ADLS",
@@ -38,7 +43,7 @@
 								"source": {
 									"type": "AzureSqlSource",
 									"sqlReaderQuery": {
-										"value": "select * from @{item().schma}.@{item().Table} where @{item().cdc_col} > '@{if(empty(item().from_date),activity('Last_cdc').output.value[0].cdc,item().from_date)}'",
+										"value": "select * from @{item().schema}.@{item().Table} where @{item().cdc_col} > '@{if(empty(item().from_date),activity('Last_cdc').output.value[0].cdc,item().from_date)}'",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00",
@@ -117,7 +122,7 @@
 									"parameters": {
 										"container": "bronze",
 										"folder": {
-											"value": "@item().table_cdc",
+											"value": "@{item().table}_cdc",
 											"type": "Expression"
 										},
 										"file": "cdc.json"
@@ -180,11 +185,11 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@pipeline().parameters.Table",
+														"value": "@item().Table",
 														"type": "Expression"
 													},
 													"file": {
-														"value": "@concat(pipeline().parameters.Table,'_',variables('current'))",
+														"value": "@concat(item().Table,'_',variables('current'))",
 														"type": "Expression"
 													}
 												}
@@ -220,7 +225,7 @@
 												{
 													"type": "Query",
 													"text": {
-														"value": "select max(@{item().cdc_col}) as cdc from @{item().schma}.@{item().Table}",
+														"value": "select max(@{item().cdc_col}) as cdc from @{item().schema}.@{item().Table}",
 														"type": "Expression"
 													}
 												}
