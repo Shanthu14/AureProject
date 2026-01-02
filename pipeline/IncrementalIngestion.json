@@ -213,7 +213,7 @@
 									{
 										"type": "Query",
 										"text": {
-											"value": "select max(@{pipeline().parameters.cdc_col}) as cdc from @{pipeline().parameters.schma}.@{pipeline().parameters.Table}",
+											"value": "select max(@{pipeline().parameters.cdc_col}) as cdc from @{pipeline().parameters.schema}.@{pipeline().parameters.Table}",
 											"type": "Expression"
 										}
 									}
